@@ -48,7 +48,9 @@ const optArticleSelector = '.post',
   optTitleSelector = '.post-title',
   optTitleListSelector = '.titles',
   optArticleTagSelector = '.post-tags .list',
-  optArticleAuthorSelector = '.post-author';
+  optArticleAuthorSelector = '.post-author',
+  optTagsListSelector = '.tags.list';
+
 
 function generateTitleLinks(customSelector = ''){
 
@@ -80,13 +82,17 @@ function generateTitleLinks(customSelector = ''){
 generateTitleLinks();
 
 function generateTags(){
+  /* [NEW] create a new variable allTags with an empty object */
+  let allTags = {};
+
   /* find all articles */
   const articles = document.querySelectorAll(optArticleSelector);
 
   /* START LOOP: for every article: */
   for(let article of articles){
   /* find tags wrapper */
-    const tagList = article.querySelector(optArticleTagSelector);
+    const tagWrapper = article.querySelector(optArticleTagSelector);
+    console.log(tagWrapper);
 
     /* make html variable with empty string */
     let html = '';
@@ -103,14 +109,43 @@ function generateTags(){
 
       /* add generated code to html variable */
       html = html + linkHTML;
-      /* END LOOP: for each tag */
+      /* [NEW] check if this link is NOT already in allTags */
+      if(!allTags[tag]){
+      /* [NEW] add tag to allTags object */
+        allTags[tag] = 1;
+      } else {
+        allTags[tag]++;
+      }
     }
+    /* END LOOP: for each tag */
     /* insert HTML of all the links into the tags wrapper */
-    tagList.innerHTML = html;
+    tagWrapper.innerHTML = html;
 
-  /* END LOOP: for every article: */
+    console.log(allTags);
+
+    const tagList = document.querySelector(optTagsListSelector);
+    /* [NEW] create variable for all links HTML code */
+    let allTagsHTML = '';
+
+    /* [NEW] START LOOP: for each tag in allTags: */
+    for(let tag in allTags){
+    /* [NEW] generate code of a link and add it to allTagsHTML */
+      allTagsHTML += '<li><a href="#tag-' + tag + '">' + tag + '</a>' + ' (' + allTags[tag] + ')</li> '
+      /* [NEW] END LOOP: for each tag in allTags: */
+
+      /*[NEW] add HTML from allTagsHTML to tagList */
+      tagList.innerHTML = allTagsHTML;
+    }
   }
 }
+/* [NEW] find list of tags in right column */
+// const tagList = document.querySelector(optTagsListSelector);
+/* [NEW] add html from allTags to tagList */
+// tagList.innerHTML = allTags.join(' ');
+
+/* END LOOP: for every article: */
+
+
 generateTags();
 
 function tagClickHandler(event){
@@ -212,5 +247,3 @@ function authorClickHandler(event){
   }
   generateTitleLinks('[data-author="' + author + '"]');
 }
-
-
