@@ -335,7 +335,7 @@ function authorClickHandler(event){
   const clickedElement = this;
   const href = clickedElement.getAttribute('href');
   const author =  href.replace('#author-', '');
-  const activeAuthorLinks = document.querySelectorAll('a.active[href^="#author-]');
+  const activeAuthorLinks = document.querySelectorAll('a.active[href^="#author-"]');
   for(let activeAuthorLink of activeAuthorLinks){
     activeAuthorLink.classList.remove('active');
   }
@@ -346,3 +346,4 @@ function authorClickHandler(event){
   }
   generateTitleLinks('[data-author="' + author + '"]');
 }
+
